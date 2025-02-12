@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: black;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #666;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 24px;
+            color: #ffcc00;
+        }
+    </style>
+    <script>
+        function chooseStudent() {
+            fetch('/choose_student', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.student) {
+                        document.getElementById('result').innerText = "Chosen Student: " + data.student;
+                    } else {
+                        document.getElementById('result').innerText = data.message || data.error;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function resetList() {
+            fetch('/reset_list', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerText = data.message || data.error;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Selection</h1>
+    <button onclick="chooseStudent()">Choose a Student</button>
+    <button onclick="resetList()">Reset List</button>
+    <p id="result"></p>
+</body>
+</html>
